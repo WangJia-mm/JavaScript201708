@@ -69,6 +69,17 @@ git / gitHub
   $ git push origin master  把本地仓库历史区中的内容(包含提交的记录)都有更新到远程仓库(ORIGIN对应的远程仓库)的MASTER主分支下  =>此处应该叫做同步,这样比提交叫法准确,因为在每一PUSH后,不仅仅是代码推送到远程仓库中,而且本地新增加的项目版本记录也都同步到了远程仓库上
 
 
+======================================
+Mark Down：
+  技术人员编写技术文档的一个新神器(一种新的语法),使用MD编写技术文档,不需要考虑样式和HTML结构等
+
+编写MD的开发工具:
+  1、WS中安装MD插件 (不推荐)
+
+  2、马克飞象 (推荐)
+   专门为印象笔记打造的一款MD的开发工具，我们可以使用印象笔记的账号登录马克飞象，在马克中编辑的文件会同步到印象笔记中
+   https://maxiang.io/ (网页版的)
+   https://pan.baidu.com/s/1sl7tx29#list/path=%2F (下载桌面版的)
 
 
 
@@ -77,6 +88,12 @@ git / gitHub
 
 
 
-.git-credentials
-  https://{username}:{password}@github.com
-git config –global credential.helper store
+
+
+
+
+
+
+
+
+
