@@ -43,6 +43,10 @@ git / gitHub
 
   $ git pull origin master  通过ORIGIN这个通道和远程仓库连接，并且把MASTER这个主分支中的原代码更新到本地仓库中(PULL ->拉取)
 
-  
 
 
+
+
+.git-credentials
+  https://{username}:{password}@github.com
+git config –global credential.helper store
