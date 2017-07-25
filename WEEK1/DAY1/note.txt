@@ -1,0 +1,48 @@
+git / gitHub
+
+1、GIT
+  项目源代码的版本控制器(代码管理工具),方便团队协作开发
+
+2、gitHub
+   -> https://github.com/
+   -> 我们所熟知的JS类库框架的项目源代码在gitHub上都有托管
+   -> 全世界权威知名，如果你的gitHub账号的粉丝很多，那么在全世界你都可以玩的很HAPPY
+   -> 可以基于gitHub免费做博客 或者 免费发布自己的网站...
+
+   Coding
+   -> https://coding.net/
+
+   =========
+
+3、git
+
+  第一次使用GIT，我们先在本地把邮箱和用户名配置一下(配置的用户名和邮箱可以随便设置，建议大家和gitHub的用户名邮箱保持一致)
+    $ git config --global user.name "你的github用户名"
+    $ git config --global user.email "你的github邮箱"
+
+
+  本地简历一个GIT仓库，并且和远程能够建立连接
+  =======
+  建立本地的GIT仓库
+    $ git init  =>在当前的项目文件夹中生成一个.git文件夹(不能删除,删除后就不是本地仓库了)
+
+  让本地仓库和远程仓库之间建立连接的通道
+    $ git remote add [名字] [远程仓库的地址]
+
+      [名字]：给传输通道起个名字，一般我们都叫做 origin
+      [远程仓库地址]：gitHub创建仓库完成后，会生成一个远程仓库地址(例如：https://github.com/zhouxiaotian/myFirstProject.git 注意是HTTPS开头的)，通过这个地址可以找到远程的仓库
+
+    $ git remote -v 查看连接情况
+    $ git remote rm [名字] 删除连接的通道
+    $ git remote update [名字] 更新连接通道
+  ========
+  $ git clone [远程仓库地址]
+   -> 在本地创建了一个GIT仓库
+   -> 让本地仓库和远程仓库保持了连接
+   -> 把远程仓库中的原代码拉取到了本地
+
+  $ git pull origin master  通过ORIGIN这个通道和远程仓库连接，并且把MASTER这个主分支中的原代码更新到本地仓库中(PULL ->拉取)
+
+  
+
+
