@@ -1,0 +1,70 @@
+<!DOCTYPE html><html><head><title>20170727</title><meta charset='utf-8'><link href='https://dn-maxiang.qbox.me/res-min/themes/marxico.css' rel='stylesheet'><style>.note-content  {font-family: 'Helvetica Neue', Arial, 'Hiragino Sans GB', STHeiti, 'Microsoft YaHei', 'WenQuanYi Micro Hei', SimSun, Song, sans-serif;}
+
+
+</style></head><body><div id='preview-contents' class='note-content'>
+                        
+                    
+
+<h4 id="20170727">20170727</h4>
+
+<h5 id="性能优化堆栈内存的销毁问题">性能优化：堆栈内存的销毁问题</h5>
+
+<p>堆内存释放</p>
+
+<blockquote>
+  <p>如果有变量(函数名)占用了堆内存的地址，那么当前的堆内存则不能释放</p>
+  
+  <p>如果当前堆内存的地址，没有被任何的东西所引用，当前的堆内存就没用了，浏览器会在空闲的时候清理掉这些没用的堆内存(谷歌浏览器)</p>
+  
+  <p>IE下的堆内存释放采用的是计数器机制，被一个变量占用，计数器累加1，如果之前的某个占用被移除，计数器减1；但是很多时候IE的计数器计数的时候出现问题，导致“内存泄漏”</p>
+</blockquote>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs actionscript"><span class="hljs-keyword">var</span> obj={name:<span class="hljs-string">'珠峰培训'</span>};<span class="hljs-comment">//-&gt;obj=xxxfff000 此时的obj把堆内存占用了</span><br><br>obj=<span class="hljs-literal">null</span>; <span class="hljs-comment">//-&gt;obj不占用堆内存了，浏览器在空闲的时候会销毁这个无用的堆内存</span><br><br><span class="hljs-comment">/*null:空对象指针，不指向任何的堆内存*/</span><br></code></pre>
+
+<p>栈内存(作用域)的释放</p>
+
+<blockquote>
+  <p>全局作用域：浏览器加载页面的时候形成全局作用域，在浏览器中把当前页面关闭的时候，全局作用域销毁</p>
+  
+  <p>私有作用域：函数执行的时候会形成私有作用域，一般情况下，函数执行完成，形成的这个私有作用域立即释放销毁</p>
+  
+  <p>特殊情况：当私有作用域中的某一个东西(一般指的都是私有作用域中开辟的那个堆内存)被作用域以外的变量给占用了，当前的私有作用域(栈内存)就不能销毁了；这个私有作用域不销毁，代表着它里面存储的私有变量也不会销毁了；</p>
+</blockquote>
+
+<h5 id="i和i的区别">i++和++i的区别</h5>
+
+<p>都是在自身基础上累加1，不同地方在于和其它值运算的时候，累加1在前还是在后</p>
+
+<blockquote>
+  <p>i++：先运算，在累加 <br>
+  ++i：先累加，在运算</p>
+</blockquote>
+
+<pre class="prettyprint hljs-dark"><code class="hljs xl">var i=<span class="hljs-number">10</span>;<br><span class="hljs-function"><span class="hljs-title">console</span>.<span class="hljs-built_in">log</span>(5+i++); //-&gt;</span>先计算<span class="hljs-number">5</span>+i,计算完成后再把i累加<span class="hljs-number">1</span>  =&gt;<span class="hljs-number">15</span>  i=<span class="hljs-number">11</span><br><span class="hljs-function"><span class="hljs-title">console</span>.<span class="hljs-built_in">log</span>(5+(i++)); //-&gt;</span>加上括号也是先运算在累加<br><br>i=<span class="hljs-number">10</span>;<br><span class="hljs-function"><span class="hljs-title">console</span>.<span class="hljs-built_in">log</span>(5+(++i)); //-&gt;</span>先让i累加<span class="hljs-number">1</span>,把累加后的结果和<span class="hljs-number">5</span>进行运算  i=<span class="hljs-number">11</span> =&gt;<span class="hljs-number">16</span><br></code></pre>
+
+<p>思考题</p>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs matlab">var <span class="hljs-built_in">i</span>=<span class="hljs-number">4</span>;<br>var res=<span class="hljs-number">5</span>+(++<span class="hljs-built_in">i</span>)+(<span class="hljs-built_in">i</span>++)+(<span class="hljs-built_in">i</span>++)+(++<span class="hljs-built_in">i</span>);<br>console.<span class="hljs-built_in">log</span>(res,<span class="hljs-built_in">i</span>);<br></code></pre>
+
+<h5 id="闭包的作用">闭包的作用</h5>
+
+<blockquote>
+  <p>你了解过闭包么？ (易车面试题)</p>
+</blockquote>
+
+<p>目前外界普遍认为“形成一个不销毁的私有作用域”才是闭包</p>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs javascript"><span class="hljs-keyword">var</span> fn=(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{<br>   <span class="hljs-keyword">var</span> n=<span class="hljs-number">12</span>;<br>   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{<br>      <span class="hljs-built_in">console</span>.log(++n);<br>   }<br>})();<br></code></pre>
+
+<p>闭包的作用:</p>
+
+<ul><li><p>保护里面的私有变量不受外界干扰(里面的变量和全局变量没关系,防止全局变量污染)</p>
+
+<pre class="prettyprint hljs-dark"><code class="hljs javascript"><span class="hljs-comment">//-&gt;例如:我们封装类库或者组件插件的时候，为了防止和全局变量冲突，我们都使用闭包把代码包裹起来(jQuery就是这样处理的)</span><br>;(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{<br>    <span class="hljs-keyword">var</span> fn=<span class="hljs-literal">null</span>; <br>    <span class="hljs-keyword">var</span> jQuery=<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{<br>         ...<br>    }<span class="hljs-comment">//-&gt;jQuery=xxxfff000</span><br><br>   <span class="hljs-built_in">window</span>.jQuery=<span class="hljs-built_in">window</span>.$=jQuery;<span class="hljs-comment">//-&gt;给全局增加了一个jQuery的属性和$的属性，这样在外面就可以使用jQuery或者$了</span><br>})();<br><br><span class="hljs-keyword">var</span> fn=<span class="hljs-literal">undefined</span>;<span class="hljs-comment">//-&gt;和闭包中的fn没关系,防止了冲突和污染</span><br>$()<span class="hljs-comment">//-&gt;$=xxxfff000</span><br></code></pre></li>
+</ul></div></body></html>
