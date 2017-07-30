@@ -122,4 +122,16 @@
 
 <blockquote>
   <p>基于面向对象的编程思想，创建“自定义类”，基于自定义的类，创建相关的实例…</p>
-</blockquote></div></body></html>
+</blockquote>
+
+
+
+<h5 id="5基于构造函数设计模式引申的原型模式">5、基于构造函数设计模式引申的原型模式</h5>
+
+<blockquote>
+  <p>原型是构造函数的引申，构造函数中公共属性部分就是由原型来掌控的</p>
+</blockquote>
+
+
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-javascript hljs"><span class="hljs-comment line-number">1.</span><span class="hljs-number">1</span>、所有的函数数据类型<br><span class="hljs-comment line-number">2.</span>    -&gt;普通函数<br><span class="hljs-comment line-number">3.</span>    -&gt;类<br><span class="hljs-comment line-number">4.</span>   天生具备一个属性：prototype，这个属性的值是一个对象，当前类的公共属性和方法都在这个对象中存储着呢<br><span class="hljs-comment line-number">5.</span><br><span class="hljs-comment line-number">6.</span><span class="hljs-number">2</span>、prototype天生具备一个属性：<span class="hljs-keyword">constructor</span>(构造函数)，这个属性存储的值就是当前类(函数)本身<br><span class="hljs-comment line-number">7.</span><br><span class="hljs-comment line-number">8.</span>3、每一个对象数据类型<br><span class="hljs-comment line-number">9.</span>    -&gt;普通对象{}<br><span class="hljs-comment line-number">10.</span>    -&gt;数组和正则等<br><span class="hljs-comment line-number">11.</span>    -&gt;类的实例<br><span class="hljs-comment line-number">12.</span>    -&gt;函数也是对象<br><span class="hljs-comment line-number">13.</span>  也会天生自带一个属性：__proto__，这个属性存储的值是它对应的类的prototype属性的值<br></code></pre></div></body></html>
