@@ -1,0 +1,70 @@
+<!DOCTYPE html><html><head><title>20170803</title><meta charset='utf-8'><link href='https://dn-maxiang.qbox.me/res-min/themes/marxico.css' rel='stylesheet'><style>
+.note-content  {font-family: 'Helvetica Neue', Arial, 'Hiragino Sans GB', STHeiti, 'Microsoft YaHei', 'WenQuanYi Micro Hei', SimSun, Song, sans-serif;}
+
+</style></head><body><div id='preview-contents' class='note-content'>
+                        
+                    
+
+<h4 id="20170803">20170803</h4>
+
+<h5 id="把类数组转换为数组">把类数组转换为数组</h5>
+
+<blockquote>
+  <p>借用数组原型上的slice方法,让slice方法执行的时候,里面的this指向arguments,这样就相当于在操作arguments这个类数组（原因：arguments是类数组,它的结构和数组太相似了,数组的一些循环遍历操作,也同样适用于类数组）</p>
+</blockquote>
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-javascript hljs"><span class="hljs-comment line-number">1.</span><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fn</span>(<span class="hljs-params"></span>)</span>{<br><span class="hljs-comment line-number">2.</span>    <span class="hljs-comment">//arguments:类数组</span><br><span class="hljs-comment line-number">3.</span>    <span class="hljs-comment">//var ary=Array.prototype.slice.call(arguments);</span><br><span class="hljs-comment line-number">4.</span>    <span class="hljs-keyword">var</span> ary=[].slice.call(<span class="hljs-built_in">arguments</span>);<br><span class="hljs-comment line-number">5.</span>}<br><span class="hljs-comment line-number">6.</span>fn(<span class="hljs-number">12</span>,<span class="hljs-number">23</span>,<span class="hljs-number">34</span>);<br></code></pre>
+
+<blockquote>
+  <p>在JS中，元素集合(<code>HTMLCollection</code>的实例)以及节点集合(<code>NodeList</code>的实例)也都是类数组</p>
+  
+  <p>这些类数组也可以借用数组原型的方法，实现一些相关的操作，例如：借用slice把类数组转换成数组</p>
+</blockquote>
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-javascript hljs"><span class="hljs-comment line-number">1.</span><span class="hljs-keyword">var</span> allTagList = <span class="hljs-built_in">document</span>.getElementsByTagName(<span class="hljs-string">'*'</span>);<span class="hljs-comment">//-&gt;*通配符：获取当前页面中所有的元素标签</span><br><span class="hljs-comment line-number">2.</span><span class="hljs-keyword">var</span> ary = <span class="hljs-built_in">Array</span>.prototype.slice.call(allTagList);<br><span class="hljs-comment line-number">3.</span><span class="hljs-built_in">console</span>.log(ary <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span>, ary);<span class="hljs-comment">//-&gt;TRUE,数组</span><br></code></pre>
+
+<blockquote>
+  <p>在IE低版本浏览器(IE6~8)中运行，我们发现ARG这个类数组是可以借用数组的方法正常操作的，但是元素集合和节点集合的类数组，无法借用数组原型上的方法，提示：Array.prototype.slice: ‘this’ 不是 JavaScript对象 的错误</p>
+  
+  <p>所以在IE低版本中，我们把节点或者元素集合转换为数组的时候，就不能偷懒了，需要自己写循环处理</p>
+</blockquote>
+
+
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-javascript hljs"><span class="hljs-comment line-number">1.</span><span class="hljs-keyword">var</span> oList=<span class="hljs-built_in">document</span>.getElementsByTagName(<span class="hljs-string">'li'</span>);<br><span class="hljs-comment line-number">2.</span><br><span class="hljs-comment line-number">3.</span><span class="hljs-comment">//-&gt;IE6~8</span><br><span class="hljs-comment line-number">4.</span><span class="hljs-keyword">var</span> ary=[];<br><span class="hljs-comment line-number">5.</span><span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>;i&lt;oList.length;i++){<br><span class="hljs-comment line-number">6.</span>    ary[ary.length]=oList[i];<br><span class="hljs-comment line-number">7.</span>}<br></code></pre>
+
+<blockquote>
+  <p>综上所述，如果我们想实现一个方法<code>把列数组转换为数组</code>，我们需要考虑的事情 <br>
+  1、兼容<code>[].slice.call([类数组])</code>这种模式的，我们使用这种模式，不能兼容的浏览器，我们使用<code>循环</code>一步步的处理 <br>
+  2、如何验证是否兼容：不兼容的情况下，浏览器会抛出异常(报错)，换句话说，只要报错了就是不兼容</p>
+</blockquote>
+
+
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-javascript hljs"><span class="hljs-comment line-number">1.</span><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">toArray</span>(<span class="hljs-params">likeAry</span>) </span>{<br><span class="hljs-comment line-number">2.</span>    <span class="hljs-keyword">var</span> ary = [];<br><span class="hljs-comment line-number">3.</span>    <span class="hljs-keyword">try</span> {<br><span class="hljs-comment line-number">4.</span>        <span class="hljs-comment">//-&gt;如果不报错代表兼容</span><br><span class="hljs-comment line-number">5.</span>        ary = <span class="hljs-built_in">Array</span>.prototype.slice.call(likeAry);<br><span class="hljs-comment line-number">6.</span>    } <span class="hljs-keyword">catch</span> (e) {<br><span class="hljs-comment line-number">7.</span>        <span class="hljs-comment">//-&gt;报错进入CATCH,代表不兼容(IE6~8)</span><br><span class="hljs-comment line-number">8.</span>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, len = likeAry.length; i &lt; len; i++) {<br><span class="hljs-comment line-number">9.</span>            ary[ary.length] = likeAry[i];<br><span class="hljs-comment line-number">10.</span>        }<br><span class="hljs-comment line-number">11.</span>    }<br><span class="hljs-comment line-number">12.</span>    <span class="hljs-keyword">return</span> ary;<br><span class="hljs-comment line-number">13.</span>}<br></code></pre>
+
+<h5 id="浏览器异常信息捕获-try-catch-finally">浏览器异常信息捕获 <code>try catch finally</code></h5>
+
+
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-javascript hljs"><span class="hljs-comment line-number">1.</span><span class="hljs-keyword">try</span>{<br><span class="hljs-comment line-number">2.</span>    <span class="hljs-comment">//-&gt;JS代码</span><br><span class="hljs-comment line-number">3.</span>}<span class="hljs-keyword">catch</span>(e){<br><span class="hljs-comment line-number">4.</span>    <span class="hljs-comment">//-&gt;TRY中的JS代码执行,如果出现错误,会进入到CATCH中(没出错不进入这里)</span><br><span class="hljs-comment line-number">5.</span>    <span class="hljs-comment">//-&gt;e(error)是一个形参(名字可以随便起,但是必须写形参,不写语法报错)  e.message:存储的是当前JS代码执行的报错信息</span><br><span class="hljs-comment line-number">6.</span>}<span class="hljs-keyword">finally</span>{<br><span class="hljs-comment line-number">7.</span>    <span class="hljs-comment">//-&gt;不管JS执行是否报错，最后都会执行finally中的内容(项目中不常用)</span><br><span class="hljs-comment line-number">8.</span>}<br></code></pre>
+
+<blockquote>
+  <p>使用try catch的作用</p>
+  
+  <ul><li>可以捕获到错误信息的同时，防止浏览器抛出异常信息，这样即使当前代码报错了，也不会影响下面的执行</li>
+  <li>可以监听到报错，我们可以利用这个机制，做一些兼容处理：把需要执行的代码放在try中，如果不兼容报错了，我们在catch中处理兼容即可</li>
+  </ul>
+</blockquote>
+
+
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-javascript hljs"><span class="hljs-comment line-number">1.</span><span class="hljs-keyword">try</span> {<br><span class="hljs-comment line-number">2.</span>    <span class="hljs-built_in">console</span>.log(a);<br><span class="hljs-comment line-number">3.</span>} <span class="hljs-keyword">catch</span> (e) {<br><span class="hljs-comment line-number">4.</span>    <span class="hljs-built_in">console</span>.log(e.message);<span class="hljs-comment">//-&gt;报错信息</span><br><span class="hljs-comment line-number">5.</span>}<br><span class="hljs-comment line-number">6.</span><br><span class="hljs-comment line-number">7.</span><span class="hljs-keyword">var</span> b = <span class="hljs-number">13</span>;<br><span class="hljs-comment line-number">8.</span><span class="hljs-built_in">console</span>.log(b);<span class="hljs-comment">//-&gt;13</span><br></code></pre>
+
+<blockquote>
+  <p>手动抛出异常信息</p>
+</blockquote>
+
+
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="hljs javascript"><span class="hljs-comment line-number">1.</span><span class="hljs-comment">/*<br><span class="hljs-comment line-number">2.</span> * 使用TRY CATCH捕获异常信息的时候，后面代码还可以继续执行，但是项目中难免会出现这样的需求：我们上面代码如果不能正常的执行，下面代码也不让他执行了，此时需要我们手动抛出异常来阻止下面代码的执行<br><span class="hljs-comment line-number">3.</span> */</span><br><span class="hljs-comment line-number">4.</span><span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'您的人品欠费，请充值~~'</span>);<span class="hljs-comment">//-&gt;创建Error类的一个实例：一条错误信息</span><br><span class="hljs-comment line-number">5.</span><span class="hljs-comment">/*<br><span class="hljs-comment line-number">6.</span> * Error这个类划分了几个常用的小类：<br><span class="hljs-comment line-number">7.</span> *  -&gt;ReferenceError：引用错误<br><span class="hljs-comment line-number">8.</span> *  -&gt;TypeError：类型错误<br><span class="hljs-comment line-number">9.</span> *  -&gt;RangeError：范围错误<br><span class="hljs-comment line-number">10.</span> *  -&gt;SyntaxError：语法错误<br><span class="hljs-comment line-number">11.</span> *  ...<br><span class="hljs-comment line-number">12.</span> */</span><br><span class="hljs-comment line-number">13.</span><span class="hljs-keyword">try</span> {<br><span class="hljs-comment line-number">14.</span>    <span class="hljs-built_in">console</span>.log(a);<br><span class="hljs-comment line-number">15.</span>} <span class="hljs-keyword">catch</span> (e) {<br><span class="hljs-comment line-number">16.</span>    <span class="hljs-comment">// e.message</span><br><span class="hljs-comment line-number">17.</span>    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">ReferenceError</span>(<span class="hljs-string">'The system is busy, please wait a moment!'</span>);<br><span class="hljs-comment line-number">18.</span>}<br></code></pre></div></body></html>
