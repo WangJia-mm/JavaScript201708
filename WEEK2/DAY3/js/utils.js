@@ -1,6 +1,5 @@
 //->utils:整个项目的公共方法库(单例模式封装)
 var utils = (function () {
-
     //->toArray:converts a like array into an array
     function toArray(likeAry) {
         var ary = [];
@@ -15,8 +14,13 @@ var utils = (function () {
         return ary;
     }
 
+    //->toJSON：converts a string into a object (JQ)
+    function toJSON(str) {
+        return 'JSON' in window ? JSON.parse(str) : eval('(' + str + ')');
+    }
 
     return {
-        toArray: toArray
+        toArray: toArray,
+        toJSON: toJSON
     }
 })();
