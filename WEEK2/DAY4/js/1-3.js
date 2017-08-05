@@ -1,5 +1,5 @@
 Object.prototype.x = 100;
-function Fn() {
+function Fn(num1, num2, num3) {
     this.x = 10;
     this.y = 20;
     this.minus = function () {
@@ -11,4 +11,3 @@ Fn.prototype.sum = function () {
     console.log(this.x + this.y);
 };
 var f = new Fn;
-var f2 = new Fn;
