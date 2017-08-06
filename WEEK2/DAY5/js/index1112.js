@@ -33,15 +33,11 @@ var stuList = document.getElementById('stuList'),
 //->让所有的行按照年龄由小到大排序
 ~function () {
     function sortRows() {
-        //->this:stuHeadList[2]
         var stuRowsAry = utils.toArray(stuRows);
-
-        var _this = this;
         stuRowsAry.sort(function (a, b) {
-            //->this:window
             var curAge = parseFloat(a.cells[2].innerHTML);
             var nextAge = parseFloat(b.cells[2].innerHTML);
-            return (curAge - nextAge) * _this.n;
+            return (curAge - nextAge) * stuHeadList[2].n;
         });
         var frg = document.createDocumentFragment();
         for (var i = 0; i < stuRowsAry.length; i++) {
@@ -52,11 +48,11 @@ var stuList = document.getElementById('stuList'),
         frg = null;
     }
 
-    stuHeadList[2].n = -1;
+    //->点击表头的第三列(年龄这一列),让其按照年龄由小到大排序
+    stuHeadList[2].n = -1;//->n这个自定义属性控制我们的升降序排列
     stuHeadList[2].onclick = function () {
         //->this:stuHeadList[2]
         this.n *= -1;
-        //sortRows();//->this:window
-        sortRows.call(this);//->this:stuHeadList[2]
+        sortRows();
     };
 }();
