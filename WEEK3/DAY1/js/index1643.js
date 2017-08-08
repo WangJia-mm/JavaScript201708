@@ -36,16 +36,12 @@
     mallList = utils.toArray(mallList);
 
     function sortGoods() {
-        //->this:menuLink[0]
-        var _this = this;
-
         mallList.sort(function (cur, next) {
-            //->this:window
             var curTime = cur.getAttribute('data-time');
             var nextTime = next.getAttribute('data-time');
             curTime = curTime.replace(/-/g, '');
             nextTime = nextTime.replace(/-/g, '');
-            return (curTime - nextTime) * _this.n;
+            return (curTime - nextTime) * menuLink[0].getAttribute('data-sortType');
         });
 
         var frg = document.createDocumentFragment();
@@ -61,12 +57,14 @@
         menuLink = menu.getElementsByTagName('a');
 
     //->给第一个A标签绑定点击事件：上架时间
-    menuLink[0].n = -1;
+    menuLink[0].setAttribute('data-sortType', -1);//->给当前点击的A设置自定义属性(属性值默认-1)：当前排序的方式  -1:降序  1:升序
     menuLink[0].onclick = function () {
         //->this:menuLink[0]
-        this.n *= -1;
+        //->每次点击切换自定义属性的值,实现升降序标识的切换
+        var dataSortType = this.getAttribute('data-sortType');
+        dataSortType *= -1;
+        this.setAttribute('data-sortType', dataSortType);
 
-        //sortGoods();//->this:window
-        sortGoods.call(this);//->this:menuLink[0]
+        sortGoods();
     }
 }();

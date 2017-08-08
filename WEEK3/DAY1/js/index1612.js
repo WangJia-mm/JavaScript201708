@@ -31,23 +31,24 @@
 
 //->实现商品排序：按照 “上架时间”、“热度”、“价格” 实现升降序的排列
 ~function () {
+    //->获取UL以及里面所有的商品(LI),并且把其转换为数组
     var mallItem = document.getElementById('mallItem'),
         mallList = mallItem.getElementsByTagName('li');
     mallList = utils.toArray(mallList);
 
+    //->sortGoods:实现按照上架时间的升序排列
     function sortGoods() {
-        //->this:menuLink[0]
-        var _this = this;
-
+        //->排序
         mallList.sort(function (cur, next) {
-            //->this:window
             var curTime = cur.getAttribute('data-time');
             var nextTime = next.getAttribute('data-time');
+            //"2017-03-15" VS "2017-02-08" =>把每一个时间的‘-’都去掉,然后比较数字的大小即可
             curTime = curTime.replace(/-/g, '');
             nextTime = nextTime.replace(/-/g, '');
-            return (curTime - nextTime) * _this.n;
+            return curTime - nextTime;
         });
 
+        //->把当前最新的数据重新的增加到页面中,以此更改页面中内容的顺序
         var frg = document.createDocumentFragment();
         for (var i = 0; i < mallList.length; i++) {
             frg.appendChild(mallList[i]);
@@ -56,17 +57,7 @@
         frg = null;
     }
 
-    //->绑定点击事件,点击的时候进行排序
-    var menu = document.getElementById('menu'),
-        menuLink = menu.getElementsByTagName('a');
+    sortGoods();
 
-    //->给第一个A标签绑定点击事件：上架时间
-    menuLink[0].n = -1;
-    menuLink[0].onclick = function () {
-        //->this:menuLink[0]
-        this.n *= -1;
 
-        //sortGoods();//->this:window
-        sortGoods.call(this);//->this:menuLink[0]
-    }
 }();
