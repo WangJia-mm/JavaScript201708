@@ -23,8 +23,6 @@
         str += `<li data-time="${cur.time}" data-hot="${cur.hot}" data-price="${cur.price}"><a href="#">
             <img src="${cur.img}" alt="">
             <span class="title">${cur.title}</span>
-            <span class="title">${cur.time}</span>
-            <span class="title">${cur.hot}</span>
             <span class="price">￥${cur.price}</span>
         </a></li>`;
     }
@@ -38,12 +36,13 @@
     mallList = utils.toArray(mallList);
 
     function sortGoods() {
+        //->this:menuLink[0]
         var _this = this;
-        var ary = ['data-time', 'data-price', 'data-hot'];
+
         mallList.sort(function (cur, next) {
-            var attr = ary[_this.index];
-            var curTime = cur.getAttribute(attr);
-            var nextTime = next.getAttribute(attr);
+            //->this:window
+            var curTime = cur.getAttribute('data-time');
+            var nextTime = next.getAttribute('data-time');
             curTime = curTime.replace(/-/g, '');
             nextTime = nextTime.replace(/-/g, '');
             return (curTime - nextTime) * _this.n;
@@ -60,18 +59,14 @@
     //->绑定点击事件,点击的时候进行排序
     var menu = document.getElementById('menu'),
         menuLink = menu.getElementsByTagName('a');
-    for (var i = 0; i < menuLink.length; i++) {
-        var curLink = menuLink[i];
-        curLink.n = -1;
-        curLink.index = i;
-        curLink.onclick = function () {
-            //->点击当前A的时候,需要让其它两个A的排序标识回归-1,只有这样以后在点击其它两个A的时候,才是从升序开始排列的
-            for (var j = 0; j < menuLink.length; j++) {
-                menuLink[j] !== this ? menuLink[j].n = -1 : null;
-            }
 
-            this.n *= -1;
-            sortGoods.call(this);
-        }
+    //->给第一个A标签绑定点击事件：上架时间
+    menuLink[0].n = -1;
+    menuLink[0].onclick = function () {
+        //->this:menuLink[0]
+        this.n *= -1;
+
+        //sortGoods();//->this:window
+        sortGoods.call(this);//->this:menuLink[0]
     }
 }();

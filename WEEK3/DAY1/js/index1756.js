@@ -37,11 +37,22 @@
         mallList = mallItem.getElementsByTagName('li');
     mallList = utils.toArray(mallList);
 
-    function sortGoods() {
+    function sortGoods(curIndex) {
+        //->当前点击A对应的索引:根据索引我们来区分按照哪一项排序即可 0->时间  1->价格  2->热度
         var _this = this;
-        var ary = ['data-time', 'data-price', 'data-hot'];
         mallList.sort(function (cur, next) {
-            var attr = ary[_this.index];
+            var attr = '';
+            switch (curIndex) {
+                case 0:
+                    attr = 'data-time';
+                    break;
+                case 1:
+                    attr = 'data-price';
+                    break;
+                case 2:
+                    attr = 'data-hot';
+                    break;
+            }
             var curTime = cur.getAttribute(attr);
             var nextTime = next.getAttribute(attr);
             curTime = curTime.replace(/-/g, '');
@@ -65,13 +76,8 @@
         curLink.n = -1;
         curLink.index = i;
         curLink.onclick = function () {
-            //->点击当前A的时候,需要让其它两个A的排序标识回归-1,只有这样以后在点击其它两个A的时候,才是从升序开始排列的
-            for (var j = 0; j < menuLink.length; j++) {
-                menuLink[j] !== this ? menuLink[j].n = -1 : null;
-            }
-
             this.n *= -1;
-            sortGoods.call(this);
+            sortGoods.call(this, this.index);
         }
     }
 }();
