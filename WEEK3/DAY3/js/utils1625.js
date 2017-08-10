@@ -61,6 +61,23 @@ var utils = (function () {
     }
 
     //->css：实现获取、单独设置、批量设置元素的样式属性
+
+    // function css() {
+    //     var arg = arguments;
+    //     if (arg.length >= 3) {
+    //         //->单独设置
+    //         setCss.apply(null, arg);
+    //         return;
+    //     }
+    //     if (arg.length === 2 && typeof arg[1] === 'object') {
+    //         //->批量设置
+    //         setGroupCss.apply(null, arg);
+    //         return;
+    //     }
+    //     //->获取样式
+    //     return getCss.apply(null, arg);
+    // }
+
     function css() {
         var arg = arguments,
             fn = getCss;
@@ -69,38 +86,9 @@ var utils = (function () {
         return fn.apply(null, arg);
     }
 
-    //->offset：获取当前元素距离BODY的偏移量
-    function offset(curEle) {
-        var l = curEle.offsetLeft,
-            t = curEle.offsetTop,
-            p = curEle.offsetParent;
-        while (p) {
-            if (!/MSIE 8/i.test(navigator.userAgent)) {
-                l += p.clientLeft;
-                t += p.clientTop;
-            }
-            l += p.offsetLeft;
-            t += p.offsetTop;
-            p = p.offsetParent;
-        }
-        return {left: l, top: t};
-    }
-
-    //->win：设置或者获取浏览器的JS盒子模型属性
-    function win(attr, value) {
-        if (typeof value !== 'undefined') {
-            document.documentElement[attr] = value;
-            document.body[attr] = value;
-            return;
-        }
-        return document.documentElement[attr] || document.body[attr];
-    }
-
     return {
         toArray: toArray,
         toJSON: toJSON,
-        css: css,
-        offset: offset,
-        win: win
+        css: css
     };
 })();
