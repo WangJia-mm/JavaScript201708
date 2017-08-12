@@ -1,6 +1,5 @@
 //->utils：common method libraries used in projects
 var utils = (function () {
-
     //->toArray：converts a like array into an array
     function toArray(likeAry) {
         var ary = [];
@@ -73,10 +72,39 @@ var utils = (function () {
         return fn.apply(null, arg);
     }
 
+    //->offset：gets the offset of the current element distance BODY => {left:xxx,top:xxx}
+    function offset(curEle) {
+        var l = curEle.offsetLeft,
+            t = curEle.offsetTop,
+            p = curEle.offsetParent;
+        while (p && p !== document.body) {
+            if (!/MSIE 8/i.test(navigator.userAgent)) {
+                l += p.clientLeft;
+                t += p.clientTop;
+            }
+            l += p.offsetLeft;
+            t += p.offsetTop;
+            p = p.offsetParent;
+        }
+        return {left: l, top: t};
+    }
+
+    //->win：operate the box model properties about the browser
+    function win(attr, value) {
+        if (typeof value !== 'undefined') {
+            document.documentElement[attr] = value;
+            document.body[attr] = value;
+            return;
+        }
+        return document.documentElement[attr] || document.body[attr];
+    }
+
     return {
         toArray: toArray,
         toJSON: toJSON,
-        css: css
+        css: css,
+        offset: offset,
+        win: win
     }
 })();
 
